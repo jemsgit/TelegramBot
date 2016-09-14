@@ -8,7 +8,8 @@ class fileManager:
         print('create fileManager')
 
     def getSettingsFromFile(self, settingsPath):
-        with open(settingsPath, 'r') as settingsFile:
+        path = os.path.abspath(settingsPath)
+        with open(path, 'r') as settingsFile:
             self.channel_list = json.load(settingsFile)
         return self.channel_list
 
@@ -18,7 +19,7 @@ class fileManager:
         path = os.path.abspath(settings.get('filePath'))
         postType = settings.get('type')
 
-        f = open(path).readlines()
+        f = open(path, 'r', encoding='utf-8', errors='ignore').readlines()
         message = None
         
         if len(f) == 0:
@@ -28,7 +29,7 @@ class fileManager:
         while (not message) and (len(f) > 0):
             message = f.pop(0);
         
-        with open(path, 'w') as F:
+        with open(path, 'w', encoding='utf-8', errors='ignore') as F:
             F.writelines(f);
 
         return message
