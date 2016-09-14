@@ -18,7 +18,7 @@ for key in channel_dict:
     times = settings.get('times')
     print(key)
 
-    def getPostFunction(key):
+    def getPostFunction(key, settings):
         def post():
             data = fileManager.getPostData(key)
             if data != None:
@@ -46,7 +46,7 @@ for key in channel_dict:
                             print('wrong source url')
         return post
         
-    post = getPostFunction(key)
+    post = getPostFunction(key, settings)
 
     for t in times:
         print(t)
