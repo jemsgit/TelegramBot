@@ -4,6 +4,7 @@ from messageParser import messageParser
 from constants import constants
 import schedule
 import time
+import datetime
 
 host = "https://api.telegram.org/bot" + constants.bot_token + "/"
 
@@ -20,6 +21,7 @@ for key in channel_dict:
 
     def getPostFunction(key, settings):
         def post():
+            now_time = datetime.datetime.now()
             data = fileManager.getPostData(key)
             if data != None:
                 if(settings.get('type') == constants.channel_photo_type):
@@ -31,8 +33,9 @@ for key in channel_dict:
                         filePath = requestManager.downloadPhoto(data.get('photo'), key)
                         request = requestManager.sendPhoto(key, filePath, data.get('message'))
                         fileManager.deleteFile(filePath)
+                        print(now_time.hour + ':' + now_time.minute + ' - ' + key + ': success:' + data.get('photo'))
                     else:
-                        print('wrong source url')
+                        print(now_time.hour + ':' + now_time.minute + ' - ' + key + ': wrong source url:' + data.get('photo'))
 
                 else:
                     if(settings.get('type') == constants.channel_links_type):
@@ -42,8 +45,9 @@ for key in channel_dict:
 
                         if valid:
                             request = requestManager.sendPost(key, data.get('message') + ' ' + data.get('link'))
+                            print(now_time.hour + ':' + now_time.minute + ' - ' + key + ': success:' + data.get('link'))
                         else:
-                            print('wrong source url')
+                            print(now_time.hour + ':' + now_time.minute + ' - ' + key + ': wrong source url:' + data.get('link'))
         return post
         
     post = getPostFunction(key, settings)
