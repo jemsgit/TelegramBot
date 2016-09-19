@@ -1,7 +1,16 @@
 import vk_mini_api
 import time
+import random
 
-community_id = ''
+
+def randomizeStrings(path):
+    content = open(path).readlines()
+    content = random.shuffle(content)
+    with open(path, 'w') as F:
+            F.writelines(f)
+            
+token = '202ff2809749836e59d4dbba6cfb62d13a317626d0b9a0664aec4341eea2d331b4b8ee285d610f0cb465c'
+community_id = '48369111'
 exclude = ['Logo pictures', '#Stuff We Like']
 vk_api = vk_mini_api.Session(token);
 albums = vk_api.getCommunityAlbums({'owner_id':community_id})
