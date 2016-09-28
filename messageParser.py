@@ -12,6 +12,17 @@ def getValues(data):
         second = ''
 
     return [first, second]
+	
+def getMultipleValues(data, parts):
+    tempData = re.split(' +', data, maxsplit=parts)
+    try:
+        link = tempData[0]
+        isYoutube = tempData[1]
+        image = tempData[2]
+        title = tempData[3]
+    except IndexError:
+        first = ''
+    return [link, isYoutube, image, title]
 
 class messageParser():
 
@@ -23,6 +34,11 @@ class messageParser():
     def parseLinkData(data):
         values = getValues(data)
         data = {'link': values[0], 'message': values[1]}
+        return data
+		
+	def parseVideoLinksData(data):
+        values = getMultipleValues(data, 3)
+        data = {'link': values[0], 'isYoutube' : values[1], 'photo': values[2], 'message': values[3]}
         return data
         
     

@@ -33,9 +33,9 @@ for key in channel_dict:
                         filePath = requestManager.downloadPhoto(data.get('photo'), key)
                         request = requestManager.sendPhoto(key, filePath, data.get('message'))
                         fileManager.deleteFile(filePath)
-                        print(now_time.hour + ':' + now_time.minute + ' - ' + key + ': success:' + data.get('photo'))
+                        print(str(now_time.hour) + ':' + str(now_time.minute) + ' - ' + key + ': success:' + data.get('photo'))
                     else:
-                        print(now_time.hour + ':' + now_time.minute + ' - ' + key + ': wrong source url:' + data.get('photo'))
+                        print(str(now_time.hour) + ':' + str(now_time.minute) + ' - ' + key + ': wrong source url:' + data.get('photo'))
 
                 else:
                     if(settings.get('type') == constants.channel_links_type):
@@ -45,9 +45,35 @@ for key in channel_dict:
 
                         if valid:
                             request = requestManager.sendPost(key, data.get('message') + ' ' + data.get('link'))
-                            print(now_time.hour + ':' + now_time.minute + ' - ' + key + ': success:' + data.get('link'))
+                            print(str(now_time.hour) + ':' + str(now_time.minute) + ' - ' + key + ': success:' + data.get('link'))
                         else:
-                            print(now_time.hour + ':' + now_time.minute + ' - ' + key + ': wrong source url:' + data.get('link'))
+                            print(str(now_time.hour) + ':' + str(now_time.minute) + ' - ' + key + ': wrong source url:' + data.get('link'))
+					else:
+                        if(settings.get('type') == constants.channel_video_type):
+                            data = messageParser.parseVideoLinksData(data)
+                            valid = requestManager.checkValidSource(data.get('link'))
+                            print(data)
+                            sendPhoto = data.get('isYoutube') == "False"
+                            print(sendPhoto)
+                            if valid & sendPhoto:
+                                print('in')
+                                valid = requestManager.checkValidSource(data.get('photo'))
+
+                            if valid:
+                                if sendPhoto:
+                                    print('send link photo')
+                                    filePath = requestManager.downloadPhoto(data.get('photo'), key)
+                                    request = requestManager.sendLinkPhoto(key, filePath, data.get('link'), data.get('message'))
+                                    print(str(now_time.hour) + ':' + str(now_time.minute) + ' - ' + key + ': success:' + data.get('link'))
+                                    fileManager.deleteFile(filePath)
+                                else:
+                                    request = requestManager.sendPost(key, data.get('message') + ' ' + data.get('link'))
+                                    print(str(now_time.hour) + ':' + str(now_time.minute) + ' - ' + key + ': success:' + data.get('link'))
+                            else:
+                                print(str(now_time.hour) + ':' + str(now_time.minute) + ' - ' + key + ': wrong source url:' + data.get('link'))
+                            
+                        else:
+                            print('wrong source url')
         return post
         
     post = getPostFunction(key, settings)

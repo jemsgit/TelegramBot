@@ -17,6 +17,10 @@ class requestManager(object):
     def sendPhoto(self, channel_id, photoPath, message):
         url = self.host + "sendPhoto"
         r = requests.post(url, data={"chat_id": channel_id, 'caption': message}, files = {'photo': open(photoPath, 'rb')})
+		
+	def sendLinkPhoto(self, channel_id, photoPath, link, message):
+        url = self.host + "sendPhoto"
+        r = requests.post(url, data={"chat_id": channel_id, 'caption': message + ' ' + link}, files = {'photo': open(photoPath, 'rb')})
 
     def downloadPhoto(self, url, name):
         path = name +".jpg"
@@ -26,7 +30,7 @@ class requestManager(object):
 
     def checkValidSource(self, url):
         try:
-            req = urllib.request.Request(url, headers = headers)
+            req = urllib.request.Request(url, headers = self.headers)
             response = urllib.request.urlopen(req)
             if response.code < 400:
                 valid = True
