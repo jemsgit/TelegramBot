@@ -48,7 +48,7 @@ for key in channel_dict:
                             print(str(now_time.hour) + ':' + str(now_time.minute) + ' - ' + key + ': success:' + data.get('link'))
                         else:
                             print(str(now_time.hour) + ':' + str(now_time.minute) + ' - ' + key + ': wrong source url:' + data.get('link'))
-					else:
+                    else:
                         if(settings.get('type') == constants.channel_video_type):
                             data = messageParser.parseVideoLinksData(data)
                             valid = requestManager.checkValidSource(data.get('link'))

@@ -18,7 +18,7 @@ class requestManager(object):
         url = self.host + "sendPhoto"
         r = requests.post(url, data={"chat_id": channel_id, 'caption': message}, files = {'photo': open(photoPath, 'rb')})
 		
-	def sendLinkPhoto(self, channel_id, photoPath, link, message):
+    def sendLinkPhoto(self, channel_id, photoPath, link, message):
         url = self.host + "sendPhoto"
         r = requests.post(url, data={"chat_id": channel_id, 'caption': message + ' ' + link}, files = {'photo': open(photoPath, 'rb')})
 

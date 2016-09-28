@@ -36,7 +36,7 @@ class messageParser():
         data = {'link': values[0], 'message': values[1]}
         return data
 		
-	def parseVideoLinksData(data):
+    def parseVideoLinksData(data):
         values = getMultipleValues(data, 3)
         data = {'link': values[0], 'isYoutube' : values[1], 'photo': values[2], 'message': values[3]}
         return data
