@@ -1,9 +1,11 @@
 import requests
 import urllib.request
+from urllib.parse import urlparse
 
 class requestManager(object):
 
     headers = {"User-Agent" : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30"}
+    youtube_check_url = 'https://www.youtube.com/oembed' 
 
     def __init__(self, host):
         super(requestManager, self).__init__()
@@ -39,3 +41,17 @@ class requestManager(object):
         except ValueError:
             valid = False
         return valid
+
+    def checkValidYoutube(self, url):
+        parser = urlparse(url)
+        path = parser.path
+        position = path.rfind('/') + 1
+        video_id = path[position :]
+        youtube_params = 'url=http://www.youtube.com/watch?v=%s&format=json' %(video_id)
+        try:
+            req = urllib.request.Request(url, headers = self.headers)
+            response = urllib.request.urlopen(req)
+            if response.code < 400:
+                valid = True
+        except urllib.error.URLError as e:
+            valid = False
