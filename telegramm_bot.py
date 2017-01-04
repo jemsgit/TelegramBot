@@ -54,14 +54,15 @@ for key in channel_dict:
                             valid = requestManager.checkValidSource(data.get('link'))
                             print(data)
                             sendPhoto = data.get('isYoutube') == "False"
-                            print(sendPhoto)
-                            if valid & sendPhoto:
-                                print('in')
-                                valid = requestManager.checkValidSource(data.get('photo'))
 
                             if valid:
                                 if sendPhoto:
-                                    print('send link photo')
+                                    valid = requestManager.checkValidSource(data.get('photo'))
+                                else:
+                                    valid = requestManager.checkValidYoutube(data.get('link'))
+
+                            if valid:
+                                if sendPhoto:
                                     filePath = requestManager.downloadPhoto(data.get('photo'), key)
                                     request = requestManager.sendLinkPhoto(key, filePath, data.get('link'), data.get('message'))
                                     print(str(now_time.hour) + ':' + str(now_time.minute) + ' - ' + key + ': success:' + data.get('link'))
