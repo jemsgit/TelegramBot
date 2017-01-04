@@ -12,15 +12,15 @@ class requestManager(object):
 
     def sendPost(self, channel_id, message):
         url = self.host + "sendMessage"
-        r = requests.post(url, data={"chat_id": channel_id, 'text': message, 'disable_web_page_preview': self.disable_web_page_preview})
+        r = requests.post(url, data={"chat_id": channel_id, 'text': message, 'disable_web_page_preview': self.disable_web_page_preview}, verify=False)
 
     def sendPhoto(self, channel_id, photoPath, message):
         url = self.host + "sendPhoto"
-        r = requests.post(url, data={"chat_id": channel_id, 'caption': message}, files = {'photo': open(photoPath, 'rb')})
+        r = requests.post(url, data={"chat_id": channel_id, 'caption': message}, files = {'photo': open(photoPath, 'rb')}, verify=False)
 		
     def sendLinkPhoto(self, channel_id, photoPath, link, message):
         url = self.host + "sendPhoto"
-        r = requests.post(url, data={"chat_id": channel_id, 'caption': message + ' ' + link}, files = {'photo': open(photoPath, 'rb')})
+        r = requests.post(url, data={"chat_id": channel_id, 'caption': message + ' ' + link}, files = {'photo': open(photoPath, 'rb')}, verify=False)
 
     def downloadPhoto(self, url, name):
         path = name +".jpg"
@@ -32,10 +32,16 @@ class requestManager(object):
         try:
             req = urllib.request.Request(url, headers = self.headers)
             response = urllib.request.urlopen(req)
+            print(response.code)
             if response.code < 400:
                 valid = True
         except urllib.error.URLError as e:
-            valid = False
+            print('urllib.error.URLError')
+            if response.code < 400:
+                valid = True
+            else:
+                valid = False
         except ValueError:
+            print('ValueError')
             valid = False
         return valid
